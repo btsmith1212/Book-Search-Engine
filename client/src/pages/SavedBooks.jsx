@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
 
 import { useMutation, useQuery } from "@apollo/client";
@@ -9,7 +9,7 @@ import { DELETE_BOOK } from "../utils/mutations";
 
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
-  const [deleteBook, { error }] = useMutation(DELETE_BOOK);
+  const [deleteBook] = useMutation(DELETE_BOOK);
   const userData = data?.me || {};
   // gets user data/profile, sets up removeBook mutation
 
