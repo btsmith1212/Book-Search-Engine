@@ -5,13 +5,13 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-      // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
+        // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
         const userData = await User.findOne({ _id: context.user._id })
           .select("-__v -password")
           .populate("books");
         return userData;
       }
-    // By adding context to our query, we can retrieve the logged in user without specifically searching for them
+      // By adding context to our query, we can retrieve the logged in user without specifically searching for them
 
       throw new AuthenticationError("Not logged in");
       // If user attempts to execute this mutation and isn't logged in, throw an error
@@ -57,9 +57,9 @@ const resolvers = {
 
       throw AuthenticationError;
     },
-    deleteBook: async (parent, args, context) => {
+    removeBook: async (parent, args, context) => {
       if (context.user) {
-    // Make it so a logged in user can only remove a book from their own profile
+        // Make it so a logged in user can only remove a book from their own profile
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $pull: { savedBooks: { bookId: args.bookId } } },
