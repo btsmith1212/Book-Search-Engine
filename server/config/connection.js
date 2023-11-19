@@ -1,14 +1,7 @@
 const mongoose = require("mongoose");
 
-const connection =
-  "mongodb+srv://btsmith1212:password1234@cluster0.pxocolz.mongodb.net/book-search-engine1212?retryWrites=true&w=majority";
-mongoose
-  .connect(connection, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-  })
-  .then(() => console.log("Database Connected Successfully"))
-  .catch((err) => console.log(err));
+mongoose.connect(
+  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/googlebooks"
+);
 
 module.exports = mongoose.connection;
