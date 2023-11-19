@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const connection =
-  "mongodb+srv://btsmith1212:password1234@cluster0.pxocolz.mongodb.net/book-search-engine?retryWrites=true&w=majority";
+  "mongodb+srv://btsmith1212:password1234@cluster0.pxocolz.mongodb.net/book-search-engine1212?retryWrites=true&w=majority";
 mongoose
   .connect(connection, {
     useNewUrlParser: true,
