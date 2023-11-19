@@ -1,6 +1,4 @@
-import React from "react";
 import { Container, Card, Button, Row, Col } from "react-bootstrap";
-
 import { useMutation, useQuery } from "@apollo/client";
 import Auth from "../utils/auth";
 import { removeBookId } from "../utils/localStorage";
@@ -10,9 +8,8 @@ import { REMOVE_BOOK } from "../utils/mutations";
 const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
   const [removeBook] = useMutation(REMOVE_BOOK);
-  const userData = data?.me || {};
+  let userData = data?.me || {};
   // gets user data/profile, sets up removeBook mutation
-
   // create function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleRemoveBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
@@ -20,9 +17,10 @@ const SavedBooks = () => {
       return false;
     }
     try {
-      const { data } = await removeBook({
+      const { user } = await removeBook({
         variables: { bookId },
       });
+      userData = user;
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
@@ -64,7 +62,7 @@ const SavedBooks = () => {
                   ) : null}
                   <Card.Body>
                     <Card.Title>{book.title}</Card.Title>
-                    <p className="small">Authors: {book.authors}</p>
+                    <p className="small">authors: {book.authors}</p>
                     <Card.Text>{book.description}</Card.Text>
                     <Button
                       className="btn-block btn-danger"

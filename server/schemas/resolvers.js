@@ -5,30 +5,20 @@ const resolvers = {
   Query: {
     me: async (parent, args, context) => {
       if (context.user) {
-        // If context has a `user` property, that means the user executing this mutation has a valid JWT and is logged in
-        const userData = await User.findOne({ _id: context.user._id })
-          .select("-__v -password")
-          .populate("books");
-        return userData;
+        return User.findOne({
+          _id: context.user._id,
+        }).select("-__v -password");
       }
-      // By adding context to our query, we can retrieve the logged in user without specifically searching for them
-
-      throw new AuthenticationError("Not logged in");
-      // If user attempts to execute this mutation and isn't logged in, throw an error
+      throw AuthenticationError;
     },
   },
   Mutation: {
-    addUser: async (parent, args) => {
-      try {
-        const user = await User.create(args);
-
-        const token = signToken(user);
-        return { token, user };
-      } catch (err) {
-        console.log(err);
-      }
+    addUser: async (parent, { username, email, password }) => {
+      const user = await User.create({ username, email, password });
+      const token = signToken(user);
+      return { token, user };
     },
-    loginUser: async (parent, { email, password }) => {
+    login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
       if (!user) {
@@ -44,25 +34,26 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    saveBook: async (parent, args, context) => {
+
+    saveBook: async (parent, { bookData }, context) => {
       if (context.user) {
-        const updatedUser = await User.findByIdAndUpdate(
+        const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $addToSet: { savedBooks: args.input } },
-          { new: true, runValidators: true }
+          { $addToSet: { savedBooks: bookData } },
+          { new: true }
         );
 
         return updatedUser;
       }
-
       throw AuthenticationError;
     },
-    removeBook: async (parent, args, context) => {
+
+    removeBook: async (parent, { bookId }, context) => {
       if (context.user) {
         // Make it so a logged in user can only remove a book from their own profile
         const updatedUser = await User.findOneAndUpdate(
           { _id: context.user._id },
-          { $pull: { savedBooks: { bookId: args.bookId } } },
+          { $pull: { savedBooks: { bookId } } },
           { new: true }
         );
 
