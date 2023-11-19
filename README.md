@@ -16,6 +16,8 @@ Please refer to the LICENSE in the repo.
 
 https://book-search-engine1212-22b5889778d2.herokuapp.com/
 
-git@github.com:btsmith1212/Book-Search-Engine.git
+https://github.com/btsmith1212/Book-Search-Engine.git
 
 ## Screenshot
+
+<img width="950" alt="Capture" src="https://github.com/btsmith1212/Book-Search-Engine/assets/135077506/4f429508-3ef5-4da0-9d1f-3f9f49c31bf5">
